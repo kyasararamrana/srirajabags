@@ -53,6 +53,7 @@
             <select class="form-control" name="bsize" id="bsize">
               <option value="0">Select</option>
               <option value="" data-width="10" data-length="14">10x14</option>
+              <option value="" data-width="12" data-length="14">12x14</option>
               <!-- <option value="2">10x14</option> -->
             </select>
           </div>
@@ -69,13 +70,14 @@
             <label>Bag GSM</label>
             <select class="form-control" name="bgsm" id="bgsm">
               <option value="0">Select</option>
+              <option value="55">55</option>
               <option value="70">70</option>
               <option value="90">90</option>
               <option value="110">110</option>
             </select>
           </div>
           <div class="form-group col-md-6">
-            <label>Handle Type</label>
+            <label>Bag Type</label>
             <select class="form-control" name="handletype" id="handletype">
               <option value="0">Select</option>
               <option value="1">D-cut</option>
@@ -344,6 +346,18 @@
           </div>
           <div class="col-md-6">
             <div class="form-group">
+              <label>Printing Cost</label>
+              <input type="text" class="form-control" name="printing_cost" id="printing_cost">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Block Charges</label>
+              <input type="text" class="form-control" name="blockCharges" id="block_charges">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
               <label>Quantity (in kg's)</label>
               <input type="text" class="form-control" name="quantitykg" id="quantity_kg" placeholder="in kg's" value="">
             </div>
@@ -355,41 +369,41 @@
             </div>
 
           </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Printing Cost</label>
-              <input type="text" class="form-control" name="printing_cost" id="printing_cost">
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Block Charges</label>
-              <input type="text" class="form-control" name="blockCharges" id="">
-            </div>
-          </div>
         </div>
         <br>
         <div class="table-responsive">
           <table class="table table-bordered">
             <tr>
-              <td><b>Estimated Cost</b></td>
-              <td>2000.00</td>
+              <td><b>Weight Of Bag</b></td>
+              <td id="weight_of_bag">0</td>
             </tr>
             <tr>
-              <td><b>Actual Cost</b></td>
-              <td>1800.00</td>
+              <td><b>Number Of Bags per kg</b></td>
+              <td id="no_of_bags_per_kg">0</td>
             </tr>
             <tr>
+              <td><b>Cost per bag</b></td>
+              <td id="cost_per_bag_value">0</td>
+            </tr>
+            <tr>
+              <td><b>Total Price</b></td>
+              <td id="total_price">0</td>
+            </tr>
+            <tr>
+              <td><b>Final Cost</b></td>
+              <td id="final_cost">0</td>
+            </tr>
+            <!-- <tr>
               <td><b>Tax</b></td>
               <td>200.00</td>
             </tr>
             <tr>
               <td><b>Nett Price</b></td>
               <td>2200.00</td>
-            </tr>
+            </tr> -->
           </table>
         </div>
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-md-6">
             <div class="form-group">
               <label>Transport</label>
@@ -402,7 +416,7 @@
               <input type="text" class="form-control" name="commenthere" id="">
             </div>
           </div>
-        </div>
+        </div> -->
         <input type="button" data-page="5" name="previous" class="previous action-button" value="Previous" />
       </fieldset>
     </form>
@@ -417,7 +431,7 @@
   $(function () {
     $('.select2').select2();
     //price calculation
-    var additional_gsm = 150;
+    var additional_gsm = 3;
     $('#handletype').change(function(){
       if ($(this).find('option:selected').text() == 'D-cut') {
         //$('#handlematrialtype,#handlesize,#handlecolor,#handlegsm,#sidepattytype,#sidepattysize,#sidepattycolor,#sidepattygsm').prop('disabled',true);
@@ -437,7 +451,7 @@
     $('#quantity_per_kg').keyup(function(){
       if ($('#handletype').find('option:selected').text() == 'D-cut') {
         var handle_weight = 0;
-        var cost_per_kg = 3.6;
+        var cost_per_kg = 135;
         var handle_rate = 0;
         var Weight_of_the_sidepatty = 0;
         var zip_rate = 0;
@@ -446,31 +460,39 @@
         var other_charges = $('#other_charges').val();
         var printing_cost = $('#printing_cost').val();
         var quantity_per_kg = $('#quantity_per_kg').val();
+        var block_charges = $('#block_charges').val();
         var minimum_quantity = 0;
-        var percentage = 10;
+        var percentage = 0.45;
         var width = $('#bsize').find('option:selected').data('width');
         var length = $('#bsize').find('option:selected').data('length');
         var bgsm = $('#bgsm').find('option:selected').val();
-        var weight_of_bag_formula = ((width * ((length * 2) + 5) * (bgsm + additional_gsm)) / 1550);
-        var weight_of_bag = Math.round(weight_of_bag_formula);
-
-        var no_of_bags_per_kg_formula = 1000/(weight_of_bag + handle_weight);
-        var no_of_bags_per_kg = Math.round(no_of_bags_per_kg_formula);
-        alert('No of bags per kg = '+no_of_bags_per_kg);
+        var weight_of_bag_formula = (width * ((length * 2) + 5) * (parseInt(bgsm) + parseInt(additional_gsm))) / 1550;
+        var weight_of_bag = weight_of_bag_formula;
+        $('#weight_of_bag').text(weight_of_bag);
+        //alert('Weight of bag ='+weight_of_bag);
+        //alert(parseInt(weight_of_bag) + parseInt(handle_weight));
+        var no_of_bags_per_kg_formula = 1000/weight_of_bag;
+        var no_of_bags_per_kg = no_of_bags_per_kg_formula;
+        $('#no_of_bags_per_kg').text(no_of_bags_per_kg);
+        //alert('No of bags per kg = '+no_of_bags_per_kg);
 
         /*=(Weight of the cloth /1000)*cost per kg) +(Weight of the sidepatty /1000)*cost perkg) +Handle Rate + Zip Rate + Stitching + Expenses + Other Charges + Printing cost + Minimum Quantity*/
 
-        var cost_per_bag_formula = ((weight_of_bag / 1000) * cost_per_kg) + ((Weight_of_the_sidepatty /1000) * cost_per_kg) + handle_rate + zip_rate + stitching + expenses + other_charges + printing_cost + minimum_quantity;
-        var cost_per_bag_value = Math.round(cost_per_bag_formula);
+        var cost_per_bag_formula = ((weight_of_bag / 1000) * cost_per_kg);
+        var cost_per_bag_value = cost_per_bag_formula;
         //alert('cost per bag = '+cost_per_bag_value);
-        var final_cost_per_bag = cost_per_bag_value + ( cost_per_bag_value * percentage / 100 );
-        var cost_per_bag = Math.round(final_cost_per_bag);
-        alert('cost per bag = '+cost_per_bag);
-        var final_cost = cost_per_bag * quantity_per_kg;
-        alert('final cost ='+final_cost);
-
-        var cost_per_kg = cost_per_kg + (no_of_bags_per_kg * (handle_rate + zip_rate + other_charges + minimum_quantity));
-        alert('cost per kg = '+cost_per_kg);
+        //$('#cost_per_bag_value').text(cost_per_bag_value);
+        var final_cost_per_bag = cost_per_bag_value + (cost_per_bag_value * percentage) + (parseInt(printing_cost));
+        //var cost_per_bag = Math.round(final_cost_per_bag);
+        $('#cost_per_bag_value').text(final_cost_per_bag);
+        //alert('cost per bag = '+cost_per_bag);
+        var total_cost = final_cost_per_bag * quantity_per_kg;
+        $('#total_price').text(total_cost);
+        //alert('final cost ='+final_cost);
+        var final_cost = (parseInt(total_cost)) + (parseInt(other_charges)) + (parseInt(expenses)) + (parseInt(block_charges));
+        $('#final_cost').text(final_cost);
+        //var cost_per_kg = cost_per_kg + (no_of_bags_per_kg * (handle_rate + zip_rate + other_charges + minimum_quantity));
+        //alert('cost per kg = '+cost_per_kg);
       }
     });
   });
