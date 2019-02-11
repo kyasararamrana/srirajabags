@@ -428,7 +428,7 @@
   <script src="js/index.js"></script>
   <script src="js/select2.full.min.js"></script>
   <script type="text/javascript">
-  $(function () {
+    $(function () {
     $('.select2').select2();
     //price calculation
     var additional_gsm = 3;
@@ -451,7 +451,7 @@
     $('#quantity_per_kg').keyup(function(){
       if ($('#handletype').find('option:selected').text() == 'D-cut') {
         var handle_weight = 0;
-        var cost_per_kg = 135;
+        var cost_per_kg = 170;
         var handle_rate = 0;
         var Weight_of_the_sidepatty = 0;
         var zip_rate = 0;
@@ -466,33 +466,26 @@
         var width = $('#bsize').find('option:selected').data('width');
         var length = $('#bsize').find('option:selected').data('length');
         var bgsm = $('#bgsm').find('option:selected').val();
+        //weight of bag
         var weight_of_bag_formula = (width * ((length * 2) + 5) * (parseInt(bgsm) + parseInt(additional_gsm))) / 1550;
         var weight_of_bag = weight_of_bag_formula;
         $('#weight_of_bag').text(weight_of_bag);
-        //alert('Weight of bag ='+weight_of_bag);
-        //alert(parseInt(weight_of_bag) + parseInt(handle_weight));
+        //no of bags per kg
         var no_of_bags_per_kg_formula = 1000/weight_of_bag;
         var no_of_bags_per_kg = no_of_bags_per_kg_formula;
         $('#no_of_bags_per_kg').text(no_of_bags_per_kg);
-        //alert('No of bags per kg = '+no_of_bags_per_kg);
-
-        /*=(Weight of the cloth /1000)*cost per kg) +(Weight of the sidepatty /1000)*cost perkg) +Handle Rate + Zip Rate + Stitching + Expenses + Other Charges + Printing cost + Minimum Quantity*/
-
+        //cost of the bag
         var cost_per_bag_formula = ((weight_of_bag / 1000) * cost_per_kg);
         var cost_per_bag_value = cost_per_bag_formula;
-        //alert('cost per bag = '+cost_per_bag_value);
-        //$('#cost_per_bag_value').text(cost_per_bag_value);
         var final_cost_per_bag = cost_per_bag_value + (cost_per_bag_value * percentage) + (parseInt(printing_cost));
-        //var cost_per_bag = Math.round(final_cost_per_bag);
         $('#cost_per_bag_value').text(final_cost_per_bag);
-        //alert('cost per bag = '+cost_per_bag);
+        //total bag cost
         var total_cost = final_cost_per_bag * quantity_per_kg;
         $('#total_price').text(total_cost);
-        //alert('final cost ='+final_cost);
+        //final cost
         var final_cost = (parseInt(total_cost)) + (parseInt(other_charges)) + (parseInt(expenses)) + (parseInt(block_charges));
         $('#final_cost').text(final_cost);
-        //var cost_per_kg = cost_per_kg + (no_of_bags_per_kg * (handle_rate + zip_rate + other_charges + minimum_quantity));
-        //alert('cost per kg = '+cost_per_kg);
+
       }
     });
   });
