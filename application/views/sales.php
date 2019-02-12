@@ -1,3 +1,4 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,8 +6,8 @@
   <title>Sri Raja Bags</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/select2.min.css">
+  <link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>">
+  <link rel="stylesheet" href="<?php echo base_url('assets/css/select2.min.css'); ?>">
 </head>
 <body>
   <div class="info">
@@ -425,8 +426,8 @@
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
   <script src='https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js'></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <script src="js/index.js"></script>
-  <script src="js/select2.full.min.js"></script>
+  <script src="<?php echo base_url('assets/js/index.js'); ?>"></script>
+  <script src="<?php echo base_url('assets/js/select2.full.min.js'); ?>"></script>
   <script type="text/javascript">
     $(function () {
     $('.select2').select2();
