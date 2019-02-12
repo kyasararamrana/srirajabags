@@ -277,34 +277,6 @@
               <option value="3">Black Blue</option>
             </select>
           </div>
-          <!-- <div class="form-group col-md-6">
-            <label>Model Numbers</label>
-            <select class="form-control select2" multiple="multiple" data-placeholder="Select" name="modelnumbers" id="modelnumbers" style="width: 100%;">
-              <option value="0">Select</option>
-              <option value="1">D11</option>
-              <option value="2">B12</option>
-              <option value="3">C18</option>
-              <option value="3">110</option>
-            </select>
-          </div> -->
-          <!-- <div class="form-group col-md-6">
-            <label>Sidepatty Printing</label>
-            <select class="form-control" name="sidepattyprint" id="">
-              <option value="0">Select</option>
-              <option value="1">Digital Print</option>
-              <option value="2">Single Color</option>
-              <option value="3">None</option>
-            </select>
-          </div> -->
-          <!-- <div class="form-group col-md-6">
-            <label>Sidepatty Printing Color</label>
-            <select class="form-control select2" multiple="multiple" data-placeholder="Select" name="sidepattyprintcolor" id="" style="width: 100%;">
-              <option value="0">Select</option>
-              <option value="1">Red</option>
-              <option value="2">Green</option>
-              <option value="3">Black Blue</option>
-            </select>
-          </div> -->
           <div class="form-group col-md-6">
             <label>Language</label>
             <select class="form-control select2" multiple="multiple" data-placeholder="Select" name="language" id="" style="width: 100%;">
@@ -316,14 +288,6 @@
               <option value="5">Tamil</option>
             </select>
           </div>
-          <!-- <div class="form-group col-md-6">
-            <label>Printing Cost</label>
-            <input type="text" class="form-control" name="printing_cost" id="printing_cost">
-          </div>
-          <div class="form-group col-md-6">
-            <label>Block Charges</label>
-            <input type="text" class="form-control" name="blockCharges" id="">
-          </div> -->
         </div>
         <input type="button" data-page="2" name="previous" class="previous action-button" value="Previous" />
         <input type="button" data-page="2" name="next" class="next action-button" value="Next" />
@@ -394,30 +358,8 @@
               <td><b>Final Cost</b></td>
               <td id="final_cost">0</td>
             </tr>
-            <!-- <tr>
-              <td><b>Tax</b></td>
-              <td>200.00</td>
-            </tr>
-            <tr>
-              <td><b>Nett Price</b></td>
-              <td>2200.00</td>
-            </tr> -->
           </table>
         </div>
-        <!-- <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Transport</label>
-              <input type="text" class="form-control" name="transport">
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Comments</label>
-              <input type="text" class="form-control" name="commenthere" id="">
-            </div>
-          </div>
-        </div> -->
         <input type="button" data-page="5" name="previous" class="previous action-button" value="Previous" />
       </fieldset>
     </form>
