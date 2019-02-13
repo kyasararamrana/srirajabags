@@ -322,17 +322,24 @@
             </div>
           </div>
           <div class="col-md-6">
+            <!-- <div class="radio"> -->
+              <label class="radio-inline">Quantity (in kg's)<input type="radio" class="" name="quantity" id="in_kgs" placeholder="in kg's" value="1"></label>
+            <!-- </div> -->
+            <!-- <div class="radio"> -->
+              <label class="radio-inline">Quantity (required no.of bags per kg)<input type="radio" class="" name="quantity" id="in_no_of_bags_per_kg" placeholder="in kg's" value="2"> </label>
+            <!-- </div> -->
+          </div>
+          <div class="col-md-6" id="quantity_kg_container">
             <div class="form-group">
               <label>Quantity (in kg's)</label>
               <input type="text" class="form-control" name="quantitykg" id="quantity_kg" placeholder="in kg's" value="">
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6" id="quantity_per_kg_container">
             <div class="form-group">
               <label>Quantity (required no.of bags per kg)</label>
               <input type="text" class="form-control" name="quantityperkg" id="quantity_per_kg" placeholder="required no.of bags per kg" value="">
             </div>
-
           </div>
         </div>
         <br>
@@ -372,66 +379,85 @@
   <script src="<?php echo base_url('assets/js/select2.full.min.js'); ?>"></script>
   <script type="text/javascript">
     $(function () {
-    $('.select2').select2();
-    //price calculation
-    var additional_gsm = 3;
-    $('#handletype').change(function(){
-      if ($(this).find('option:selected').text() == 'D-cut') {
-        //$('#handlematrialtype,#handlesize,#handlecolor,#handlegsm,#sidepattytype,#sidepattysize,#sidepattycolor,#sidepattygsm').prop('disabled',true);
-        $('.handle').prop('disabled',true);
-      } else {
-        //$('#handlematrialtype,#handlesize,#handlecolor,#handlegsm,#sidepattytype,#sidepattysize,#sidepattycolor,#sidepattygsm').prop('disabled',false);
-        $('.handle').prop('disabled',false);
-      }
+      $('.select2').select2();
+      //price calculation
+      var additional_gsm = 3;
+      $('#handletype').change(function(){
+        if ($(this).find('option:selected').text() == 'D-cut') {
+          //$('#handlematrialtype,#handlesize,#handlecolor,#handlegsm,#sidepattytype,#sidepattysize,#sidepattycolor,#sidepattygsm').prop('disabled',true);
+          $('.handle').prop('disabled',true);
+        } else {
+          //$('#handlematrialtype,#handlesize,#handlecolor,#handlegsm,#sidepattytype,#sidepattysize,#sidepattycolor,#sidepattygsm').prop('disabled',false);
+          $('.handle').prop('disabled',false);
+        }
+      });
+      $('#first-tab').click(function(){
+        if ($('#mtype').find('option:selected').text() == 'Nonwoven') {
+          //$('').prop('disabled',true);
+        } else {
+          //$('').prop('disabled',false);
+        }
+      });
+      //hiding and showing quantity input boxes
+      $('input[name="quantity"]').click(function(){
+        if($(this).val() == 1) {
+          $('#quantity_kg_container').show();
+          $('#quantity_per_kg_container').hide();
+          $('#quantity_per_kg').val('');
+        } else if ($(this).val() == 2) {
+          $('#quantity_per_kg_container').show();
+          $('#quantity_kg_container').hide();
+          $('#quantity_kg').val('');
+        }
+      });
+      $('#quantity_per_kg_container').hide();
+      //calculation for given parameters
+      $('#quantity_kg,#quantity_per_kg').keyup(function(){
+        if ($('#handletype').find('option:selected').text() == 'D-cut') {
+          var handle_weight = 0;
+          var cost_per_kg = 170;
+          var handle_rate = 0;
+          var Weight_of_the_sidepatty = 0;
+          var zip_rate = 0;
+          var stitching = 0;
+          var expenses = $('#expenses').val();
+          var other_charges = $('#other_charges').val();
+          var printing_cost = $('#printing_cost').val();
+          var quantity_kg = $('#quantity_kg').val();
+          var quantity_per_kg = $('#quantity_per_kg').val();
+          var block_charges = $('#block_charges').val();
+          var minimum_quantity = 0;
+          var percentage = 0.45;
+          var width = $('#bsize').find('option:selected').data('width');
+          var length = $('#bsize').find('option:selected').data('length');
+          var bgsm = $('#bgsm').find('option:selected').val();
+          //weight of bag
+          var weight_of_bag_formula = (width * ((length * 2) + 5) * (parseInt(bgsm) + parseInt(additional_gsm))) / 1550;
+          var weight_of_bag = weight_of_bag_formula;
+          $('#weight_of_bag').text(weight_of_bag);
+          //no of bags per kg
+          var no_of_bags_per_kg_formula = 1000/weight_of_bag;
+          var no_of_bags_per_kg = no_of_bags_per_kg_formula;
+          $('#no_of_bags_per_kg').text(no_of_bags_per_kg);
+          //cost of the bag
+          var cost_per_bag_formula = ((weight_of_bag / 1000) * cost_per_kg);
+          var cost_per_bag_value = cost_per_bag_formula;
+          var final_cost_per_bag = cost_per_bag_value + (cost_per_bag_value * percentage) + (parseInt(printing_cost));
+          $('#cost_per_bag_value').text(final_cost_per_bag);
+          //total bag cost
+          if((quantity_per_kg != '') && (typeof quantity_per_kg !== "undefined")) {
+            var total_cost = final_cost_per_bag * parseInt(quantity_per_kg) * no_of_bags_per_kg;
+            $('#total_price').text(total_cost);
+          } else if((quantity_kg != '') && (typeof quantity_kg !== "undefined")) {
+            var total_cost = final_cost_per_bag * parseInt(quantity_kg);
+            $('#total_price').text(total_cost);
+          }
+          //final cost
+          var final_cost = (parseInt(total_cost)) + (parseInt(other_charges)) + (parseInt(expenses)) + (parseInt(block_charges));
+          $('#final_cost').text(final_cost);
+        }
+      });
     });
-    $('#first-tab').click(function(){
-      if ($('#mtype').find('option:selected').text() == 'Nonwoven') {
-        //$('').prop('disabled',true);
-      } else {
-        //$('').prop('disabled',false);
-      }
-    });
-    $('#quantity_kg').keyup(function(){
-      if ($('#handletype').find('option:selected').text() == 'D-cut') {
-        var handle_weight = 0;
-        var cost_per_kg = 170;
-        var handle_rate = 0;
-        var Weight_of_the_sidepatty = 0;
-        var zip_rate = 0;
-        var stitching = 0;
-        var expenses = $('#expenses').val();
-        var other_charges = $('#other_charges').val();
-        var printing_cost = $('#printing_cost').val();
-        var quantity_kg = $('#quantity_kg').val();
-        var block_charges = $('#block_charges').val();
-        var minimum_quantity = 0;
-        var percentage = 0.45;
-        var width = $('#bsize').find('option:selected').data('width');
-        var length = $('#bsize').find('option:selected').data('length');
-        var bgsm = $('#bgsm').find('option:selected').val();
-        //weight of bag
-        var weight_of_bag_formula = (width * ((length * 2) + 5) * (parseInt(bgsm) + parseInt(additional_gsm))) / 1550;
-        var weight_of_bag = weight_of_bag_formula;
-        $('#weight_of_bag').text(weight_of_bag);
-        //no of bags per kg
-        var no_of_bags_per_kg_formula = 1000/weight_of_bag;
-        var no_of_bags_per_kg = no_of_bags_per_kg_formula;
-        $('#no_of_bags_per_kg').text(no_of_bags_per_kg);
-        //cost of the bag
-        var cost_per_bag_formula = ((weight_of_bag / 1000) * cost_per_kg);
-        var cost_per_bag_value = cost_per_bag_formula;
-        var final_cost_per_bag = cost_per_bag_value + (cost_per_bag_value * percentage) + (parseInt(printing_cost));
-        $('#cost_per_bag_value').text(final_cost_per_bag);
-        //total bag cost
-        var total_cost = final_cost_per_bag * parseInt(quantity_kg) * no_of_bags_per_kg;
-        $('#total_price').text(total_cost);
-        //final cost
-        var final_cost = (parseInt(total_cost)) + (parseInt(other_charges)) + (parseInt(expenses)) + (parseInt(block_charges));
-        $('#final_cost').text(final_cost);
-
-      }
-    });
-  });
   </script>
 </body>
 </html>
